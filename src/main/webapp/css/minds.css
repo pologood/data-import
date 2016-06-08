@@ -1,0 +1,11 @@
+.top_bar {
+	margin-top: 87px;
+	color: inherit;
+	background-color: #eee;
+	margin-bottom: 8px;
+}
+
+.dropdown-toggle>span {
+	color: #FFF;
+	font-weight: bold;
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj58.chr.data.dao.mapper.CvIdCoIdMapper2">
+
+	<resultMap id="CvIdCoId" type="CvIdCoId">
+		<id property="id" column="id" />
+		<result property="coId" column="co_id" />
+		<result property="cvId" column="cv_id" />
+	</resultMap>
+
+
+
+	<select id="list" resultMap="CvIdCoId" parameterType="map">
+		select
+		id,co_id,cv_id from ${table}
+		<where>
+			id>= #{id} limit 100
+		</where>
+	</select>
+
+	<select id="getByCvId" resultMap="CvIdCoId" parameterType="map">
+		select
+		id,co_id,cv_id from ${table}
+		<where>
+			cv_id=#{cv_id}
+		</where>
+	</select>
+
+
+
+</mapper>

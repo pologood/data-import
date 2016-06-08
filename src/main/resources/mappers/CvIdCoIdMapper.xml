@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj58.chr.data.dao.mapper.CvIdCoIdMapper">
+
+	<resultMap id="CvIdCoId" type="CvIdCoId">
+		<id property="id" column="id" />
+		<result property="coId" column="co_id" />
+		<result property="cvId" column="cv_id" />
+	</resultMap>
+
+	<insert id="save" parameterType="CvIdCoId">
+		insert into cv_idcoid
+		(id,co_id,cv_id)values(null,#{coId},#{cvId})
+	</insert>
+
+	<update id="update" parameterType="CvIdCoId">
+		update cv_idcoid set co_id=#{coId},cv_id=#{cvId}
+		<where> id = #{id}</where>
+	</update>
+
+	<select id="findById" resultMap="CvIdCoId" parameterType="CvIdCoId">
+		select cv_id,co_id from cv_idcoid
+		<where> co_id = #{coId}</where>
+	</select>
+
+
+	<delete id="remove" parameterType="CvIdCoId">
+		delete from cv_idcoid
+		<where>co_id = #{coId}</where>
+	</delete>
+
+</mapper>

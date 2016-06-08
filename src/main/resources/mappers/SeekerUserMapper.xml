@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj58.chr.data.dao.mapper.SeekerUserMapper">
+
+	<resultMap id="SeekerUser" type="SeekerUser">
+		<id property="id" column="id" />
+		<result property="uid" column="uid" />
+		<result property="pwd" column="pwd" />
+		<result property="email" column="email" />
+		<result property="mobile" column="mobile" />
+		<result property="coId" column="coid" />
+		<result property="ext" column="ext" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+	</resultMap>
+
+	<sql id="seekerUserField">id,uid,pwd,email,mobile,coid,ext,create_time,update_time
+	</sql>
+
+	<insert id="save" parameterType="SeekerUser">
+		insert into seeker_user
+		(id,uid,pwd,email,mobile,coid,ext,create_time)
+		values(null,#{uid},#{pwd},#{email},#{mobile},#{coId},#{ext},now())
+	</insert>
+
+	<update id="update" parameterType="SeekerUser">
+		update seeker_user set
+		mobile=#{mobile},email=#{email}
+		<where> uid = #{uid}</where>
+	</update>
+
+	<select id="findById" resultMap="SeekerUser" parameterType="SeekerUser">
+		select
+		<include refid="seekerUserField" />
+		from seeker_user
+		<where> uid = #{uid}</where>
+	</select>
+
+	<select id="findByCoId" resultMap="SeekerUser" parameterType="SeekerUser">
+		select
+		<include refid="seekerUserField" />
+		from seeker_user
+		<where> coid = #{coId}</where>
+	</select>
+
+	<delete id="remove" parameterType="int">
+		delete from seeker_user
+		<where> uid = #{uid}</where>
+	</delete>
+
+
+	<select id="list" resultMap="SeekerUser" parameterType="map">
+		select
+		<include refid="seekerUserField" />
+		from seeker_user order by id desc
+		<if test="_parameter != null">
+			limit #{pageRequest.offset},#{pageRequest.pageSize}
+		</if>
+	</select>
+
+	<select id="count" resultType="long" parameterType="map">
+		select
+		count(1) from seeker_user
+	</select>
+
+</mapper>

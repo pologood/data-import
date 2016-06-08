@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj58.chr.data.dao.mapper.RuleMapper">
+
+	<cache type="com.bj58.chr.data.cache.JVMCache" />
+
+	<resultMap id="Rule" type="Rule">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="template" column="template" />
+		<result property="test" column="test" />
+		<result property="abtest" column="abtest" />
+		<result property="note" column="note" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+	</resultMap>
+
+	<sql id="ruleField">id,name,template,test,abtest,note,create_time,update_time</sql>
+
+	<insert id="save" parameterType="Rule">
+		insert into rule
+		(id,name,template,test,abtest,note,create_time)values(null,#{name},#{template},#{test},#{abtest},#{note},now())
+	</insert>
+
+	<update id="update" parameterType="Rule">
+		update rule set
+		name=#{name},template=#{template},test=#{test},abtest=#{abtest},note=#{note}
+		<where> id = #{id}</where>
+	</update>
+
+	<select id="findById" resultMap="Rule" parameterType="int">
+		select
+		<include refid="ruleField" />
+		from rule
+		<where> id = #{id}</where>
+	</select>
+
+	<delete id="remove" parameterType="int">
+		delete from rule
+		<where> id = #{id}</where>
+	</delete>
+
+
+	<select id="list" resultMap="Rule" parameterType="map">
+		select
+		<include refid="ruleField" />
+		from rule order by id desc
+		<if test="_parameter != null">
+			limit #{pageRequest.offset},#{pageRequest.pageSize}
+		</if>
+	</select>
+
+	<select id="count" resultType="long" parameterType="map">
+		select
+		count(1) from rule
+	</select>
+
+</mapper>

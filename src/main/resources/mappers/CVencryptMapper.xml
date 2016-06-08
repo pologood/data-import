@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj58.chr.data.dao.mapper.CVencryptMapper">
+
+	<resultMap id="CVencrypt" type="CVencrypt">
+		<id property="id" column="id" />
+		<result property="coid" column="coid" />
+		<result property="uid" column="uid" />
+		<result property="cvid" column="cvid" />
+		<result property="encrpt" column="encrpt" />
+		<result property="original" column="original" />
+		<result property="uptime" column="uptime" />
+	</resultMap>
+
+	<sql id="cvEncryptField">id,coid,cvid,uid,encrpt,original,uptime</sql>
+
+	<insert id="save" parameterType="CVencrypt">
+		insert into cv_encrypt
+		(id,coid,cvid,uid,encrpt,original,uptime)values(null,#{coid},#{cvid},#{uid},#{encrpt},#{original},#{uptime})
+	</insert>
+
+	<update id="update" parameterType="CVencrypt">
+		update cv_encrypt set coid=#{coid},uptime=#{uptime}
+		<where> encrpt = #{encrpt} </where>
+	</update>
+
+	<delete id="remove" parameterType="int">
+		delete from cv_encrypt
+		<where> encrpt = #{encrpt}</where>
+	</delete>
+
+	<select id="findByEncrypt" resultMap="CVencrypt" parameterType="map">
+		select
+		<include refid="cvEncryptField" />
+		from cv_encrypt
+		<where>
+			encrpt = #{encrpt}
+		</where>
+	</select>
+
+</mapper>

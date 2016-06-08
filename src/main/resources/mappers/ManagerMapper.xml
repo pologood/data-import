@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj58.chr.data.dao.mapper.ManagerMapper">
+	<resultMap id="Manager" type="Manager">
+		<id property="id" column="id" />
+		<result property="username" column="username" />
+		<result property="password" column="password" />
+		<result property="name" column="name" />
+		<result property="root" column="root" />
+		<result property="note" column="note" />
+		<result property="createTime" column="create_time" />
+		<association property="role" javaType="Role" column="role_id"
+			select="getRelated">
+		</association>
+	</resultMap>
+
+	<resultMap id="Role" type="Role">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="menus" column="menus" />
+		<result property="note" column="note" />
+	</resultMap>
+
+	<insert id="save" parameterType="Manager">
+		insert into manager
+		(id,username,password,name,root,role_id,note)values(null,#{username},#{password},#{name},#{root},#{role.id},#{note})
+	</insert>
+
+	<update id="update" parameterType="Manager">
+		update manager set
+		name=#{name},root=#{root},role_id=#{role.id},note=#{note}
+		<where> id = #{id}</where>
+	</update>
+
+	<select id="findById" resultMap="Manager" parameterType="int">
+		select
+		id,name,root,role_id,note from manager
+		<where> id = #{id}</where>
+	</select>
+
+	<delete id="delete" parameterType="int">
+		delete from manager
+		<where> id = #{id}</where>
+	</delete>
+
+
+	<select id="list" resultMap="Manager" parameterType="map">
+		select
+		id,name,username,root,role_id,note,create_time from manager
+		order by
+		id
+		desc
+		<if test="_parameter != null">
+			limit #{pageRequest.offset},#{pageRequest.pageSize}
+		</if>
+	</select>
+
+	<select id="count" resultType="long">
+		select count(*) from manager
+	</select>
+
+
+	<select id="login" parameterType="Manager" resultMap="Manager">
+		select
+		id,username,role_id,root
+		from manager
+		where username=#{username} and
+		password=#{password}
+	</select>
+
+
+
+	<select id="getRelated" resultMap="Role" parameterType="int">
+		select
+		id,name,menus,note from role
+		<where> id = #{id}</where>
+	</select>
+
+
+</mapper>

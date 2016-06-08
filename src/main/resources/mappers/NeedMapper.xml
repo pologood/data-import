@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj58.chr.data.dao.mapper.NeedMapper">
+
+	<resultMap id="Need" type="Need">
+		<id property="id" column="id" />
+		<result property="coid" column="coid" />
+		<result property="need" column="need" />
+		<result property="createdTime" column="create_time" />
+	</resultMap>
+
+	<insert id="save" parameterType="Need">
+		insert into need
+		(id,coid,need,create_time)values(null,#{coid},0,#{createdTime})
+	</insert>
+
+	<select id="findByCoid" resultMap="Need" parameterType="int">
+		select id,coid from need
+		<where> coid = #{coid} and need=0</where>
+	</select>
+
+	<update id="fulfil" parameterType="int">
+		update need set need=1
+		<where> coid = #{coid} and need=0</where>
+	</update>
+
+
+</mapper>

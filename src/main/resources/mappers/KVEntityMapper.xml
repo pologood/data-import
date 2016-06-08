@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bj58.chr.data.dao.mapper.KVEntityMapper">
+
+	<cache type="com.bj58.chr.data.cache.JVMCache" />
+
+	<resultMap id="KVEntity" type="KVEntity">
+		<id property="id" column="id" />
+		<result property="qdId" column="qd_id" />
+		<result property="qdName" column="qd_name" />
+		<result property="ycId" column="yc_id" />
+		<result property="ycName" column="yc_name" />
+		<result property="root" column="root" />
+		<result property="kVGroup.id" column="kv_group_id" />
+	</resultMap>
+
+	<insert id="save" parameterType="KVEntity">
+		insert into kv_entity
+		(id,qd_id,qd_name,yc_id,yc_name,root,kv_group_id)values(null,#{qdId},#{qdName},#{ycId},#{ycName},#{root},#{kVGroup.id})
+	</insert>
+
+	<update id="update" parameterType="KVEntity">
+		update kv_entity set
+		qd_id=#{qdId},qd_name=#{qdName},yc_id=#{ycId},yc_name=#{ycName},root=#{root},kv_group_id=#{kVGroup.id}
+		<where> id = #{id}</where>
+	</update>
+
+	<select id="findById" resultMap="KVEntity" parameterType="int">
+		select
+		id,qd_id,qd_name,yc_id,yc_name,root,kv_group_id from kv_entity
+		<where> id = #{id}</where>
+	</select>
+
+
+	<select id="findByIdName" resultMap="KVEntity" parameterType="KVEntity">
+		select
+		id,qd_id,qd_name,yc_id,yc_name,root,kv_group_id from kv_entity
+		<where>kv_group_id = #{kVGroup.id} and qd_id = #{qdId} and
+			qd_name=#{qdName}
+		</where>
+	</select>
+
+	<delete id="remove" parameterType="int">
+		delete from kv_entity
+		<where> id = #{id}</where>
+	</delete>
+
+	<select id="list" resultMap="KVEntity" parameterType="map">
+		select
+		id,qd_id,qd_name,yc_id,yc_name,root,kv_group_id from kv_entity
+		<where>
+		<if test="kVGroupId != null">
+		kv_group_id = #{kVGroupId}
+		</if>
+		<if test="qdId != null">
+		and qd_id = #{qdId}
+		</if>
+		<if test="qdName != null">
+		and qd_name = #{qdName}
+		</if>
+		<if test="root !=null">
+		and root = #{root}
+		</if>
+		</where>
+		order by id desc
+			<!-- 
+			limit
+			#{pageRequest.offset},#{pageRequest.pageSize}
+			 -->
+	</select>
+
+</mapper>

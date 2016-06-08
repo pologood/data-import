@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+	http://www.springframework.org/schema/mvc  
+	http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-4.1.xsd 
+	http://www.springframework.org/schema/jee 
+	http://www.springframework.org/schema/jee/spring-jee-4.1.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.bj58.chr.data" />
+
+	<mvc:annotation-driven conversion-service="conversionService" />
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+	</bean>
+
+	<!-- 配置 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:commons.properties</value>
+				<value>classpath:dataSource.properties</value>
+				<value>classpath:esb.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- esb消息队列 -->
+	<bean id="cvMessageSend" class="com.bj58.chr.data.esb.MessageSend">
+		<constructor-arg index="0">
+			<value>${esbUrl}</value>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<value>${esbItem}</value>
+		</constructor-arg>
+	</bean>
+	<bean id="callBackMessageSend" class="com.bj58.chr.data.esb.MessageSend">
+		<constructor-arg index="0">
+			<value>${esbCallBackUrl}</value>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<value>${esbCallBackItem}</value>
+		</constructor-arg>
+	</bean>
+	<!-- scf init -->
+	<bean class="com.bj58.chr.data.utils.SCFInitHelper" />
+
+	<import resource="spring/spring-auth.xml" />
+	<import resource="spring/spring-dataSource.xml" />
+	<import resource="spring/spring-mybatis.xml" />
+	<import resource="spring/spring-mongo.xml" />
+</beans>

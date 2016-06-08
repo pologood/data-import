@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj58.chr.data.dao.mapper.ConfigMapper">
+
+	<cache type="com.bj58.chr.data.cache.JVMCache" />
+
+	<resultMap id="Config" type="Config">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="value" column="value" />
+		<result property="note" column="note" />
+	</resultMap>
+
+	<insert id="save" parameterType="Config">
+		insert into config
+		(id,name,value,note)values(null,#{name},#{value},#{note})
+	</insert>
+
+	<update id="update" parameterType="Config">
+		update config set
+		name=#{name},value=#{value},note=#{note}
+		<where> id = #{id}</where>
+	</update>
+
+	<select id="findById" resultMap="Config" parameterType="int">
+		select
+		id,name,value,note from config
+		<where> id = #{id}</where>
+	</select>
+
+	<select id="getByName" resultType="String" parameterType="String">
+		select value from config
+		<where> name = #{name}</where>
+	</select>
+
+	<select id="list" resultMap="Config" parameterType="map">
+		select
+		id,name,value,note from config
+	</select>
+
+	<delete id="remove" parameterType="int">
+		delete from config
+		<where> id = #{id}</where>
+	</delete>
+
+</mapper>

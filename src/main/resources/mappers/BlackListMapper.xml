@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj58.chr.data.dao.mapper.BlackListMapper">
+
+	<resultMap id="BlackList" type="BlackList">
+		<id property="id" column="id" />
+		<result property="coid" column="coid" />
+		<result property="cvid" column="cvid" />
+		<result property="addTime" column="add_time" />
+		<result property="updateTime" column="update_time" />
+	</resultMap>
+	
+	<sql id="fields">
+	id,coid,cvid,mobile,add_time,update_time
+	</sql>
+
+	<insert id="save" parameterType="BlackList">
+		insert into blacklist
+		(id,coid,cvid,mobile,add_time) values(null,#{coid},#{cvid},#{mobile},now())
+	</insert>
+
+	<update id="update" parameterType="BlackList">
+	</update>
+	
+	<select id="findOneByMap" resultType="BlackList" parameterType="map">
+		select
+		<include refid="fields"/> from blacklist
+		<where>
+		<if test="coid !=null">
+			 coid = #{coid}
+		</if>
+		<if test="mobile !=null">
+			 mobile = #{mobile}
+		</if>
+		</where>
+		limit 1
+	</select>
+
+	<select id="findById" resultMap="BlackList" parameterType="int">
+		select
+		<include refid="fields"/> from blacklist
+		<where> id = #{id}</where>
+	</select>
+
+	<select id="getByName" resultType="String" parameterType="String">
+	</select>
+
+	<select id="list" resultMap="BlackList" parameterType="map">
+		select
+		<include refid="fields"/> from blacklist
+		order by add_time desc
+		<if test="offset != null and pageSize !=null">
+		limit #{offset},#{pageSize}
+		</if>
+	</select>
+
+	<delete id="remove" parameterType="int">
+	delete from blacklist where id = #{id}
+	</delete>
+
+</mapper>

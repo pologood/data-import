@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj58.chr.data.dao.mapper.KVGroupMapper">
+
+	<cache type="com.bj58.chr.data.cache.JVMCache" />
+
+	<resultMap id="KVGroup" type="KVGroup">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+	</resultMap>
+
+	<insert id="save" parameterType="KVGroup">
+		insert into kv_group
+		(id,name)values(null,#{name})
+	</insert>
+
+	<update id="update" parameterType="KVGroup">
+		update kv_group set name=#{name}
+		<where> id = #{id}</where>
+	</update>
+
+	<select id="findById" resultMap="KVGroup" parameterType="int">
+		select id,name from kv_group
+		<where>id = #{id}</where>
+	</select>
+
+	<delete id="remove" parameterType="int">
+		delete from kv_group
+		<where> id = #{id}</where>
+	</delete>
+
+
+	<select id="list" resultMap="KVGroup" parameterType="map">
+		select id,name from kv_group order by id desc
+		<if test="_parameter != null">
+			limit #{pageRequest.offset},#{pageRequest.pageSize}
+		</if>
+	</select>
+
+</mapper>
